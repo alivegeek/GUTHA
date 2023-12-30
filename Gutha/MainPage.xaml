@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Gutha.MainPage">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30,0" Spacing="25">
+
+            <!-- Existing controls... -->
+
+         <Frame Padding="0" Margin="0,30,0,0" CornerRadius="10" BackgroundColor="LightGray">
+    <Editor x:Name="textInput" 
+            Placeholder="Enter text here" 
+            HeightRequest="150" 
+            BackgroundColor="Transparent"
+            TextChanged="OnTextInputChanged"/>
+</Frame>
+
+            <!-- Submit and Play/Pause Buttons -->
+            <Button x:Name="submitButton" Text="Submit" Clicked="OnSubmitClicked"/>
+            <Button x:Name="playPauseButton" Text="Play/Pause" Clicked="OnPlayPauseClicked"/>
+
+            <!-- Estimated Cost Label -->
+            <Label x:Name="estimatedCostLabel" Text="Estimated cost: $0.000"/>
+                <Label x:Name="statusLabel" TextColor="Red" />
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+</ContentPage>

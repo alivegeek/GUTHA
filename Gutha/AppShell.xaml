@@ -1,0 +1,40 @@
+﻿<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:local="clr-namespace:Gutha" 
+       x:Class="Gutha.AppShell"
+       Shell.FlyoutBehavior="Locked"
+       FlyoutBackgroundColor="LightGray"
+       Title="Gutha Text To Speech">
+
+    <!-- Custom Flyout Header -->
+    <Shell.FlyoutHeaderTemplate>
+        <DataTemplate>
+            <Grid Padding="10" BackgroundColor="DarkGray">
+                <Label Text="My Application" FontAttributes="Bold" FontSize="Large" TextColor="White"/>
+            </Grid>
+        </DataTemplate>
+    </Shell.FlyoutHeaderTemplate>
+
+    <!-- Flyout Item Template -->
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid Padding="10">
+                <Label Text="{Binding Title}"
+                       TextColor="Black"
+                       FontAttributes="Bold"/>
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
+    <!-- Main navigation item for Home -->
+    <FlyoutItem Title="Home" Icon="icon_home.png">
+        <ShellContent Route="MainPage" ContentTemplate="{DataTemplate local:MainPage}" />
+    </FlyoutItem>
+    
+    <!-- Settings navigation item -->
+    <FlyoutItem Title="Settings" Icon="icon_settings.png">
+        <ShellContent ContentTemplate="{DataTemplate local:Settings}" />
+    </FlyoutItem>
+
+    <!-- Other Flyout Items can be added here -->
+</Shell>

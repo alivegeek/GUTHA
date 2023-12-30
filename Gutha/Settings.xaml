@@ -1,0 +1,35 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Gutha.Settings"
+             Title="Settings">
+
+    <ScrollView>
+        <StackLayout Padding="20">
+            <!-- API Key Input -->
+            <Label Text="API Key" FontAttributes="Bold"/>
+            <Entry x:Name="apiKeyEntry" Placeholder="Enter API key" Text="{Binding ApiKey, Mode=TwoWay}"/>
+
+            <!-- Voice Picker -->
+            <Label Text="Voice" FontAttributes="Bold"/>
+            <Picker x:Name="voicePicker" 
+                    SelectedItem="{Binding SelectedVoice, Mode=TwoWay}" 
+                    Title="Select a Voice">
+                <Picker.Items>
+                    <x:String>Alloy</x:String>
+                    <x:String>Echo</x:String>
+                    <x:String>Fable</x:String>
+                    <x:String>Onyx</x:String>
+                    <x:String>Nova</x:String>
+                    <x:String>Shimmer</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <!-- Audio Quality Toggle -->
+            <Label Text="HD Audio Quality" FontAttributes="Bold"/>
+            <Switch x:Name="qualityToggle" IsToggled="{Binding IsHdAudio, Mode=TwoWay}"/>
+            <Label Text="{Binding Source={x:Reference qualityToggle}, Path=IsToggled, StringFormat='{0:Standard;HD Audio}'}"/>
+
+            <Button Text="Save" Command="{Binding SaveSettingsCommand}" />
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
