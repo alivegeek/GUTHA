@@ -12,6 +12,7 @@ namespace Gutha.ViewModels
         private string _apiKey;
         private string _selectedVoice;
         private bool _isHdAudio;
+        public List<string> Voices { get; } = new List<string> { "alloy", "echo", "fable", "onyx", "nova", "shimmer" };
 
         public string ApiKey
         {
@@ -26,18 +27,7 @@ namespace Gutha.ViewModels
             }
         }
 
-        public string SelectedVoice
-        {
-            get => _selectedVoice;
-            set
-            {
-                if (_selectedVoice != value)
-                {
-                    _selectedVoice = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+      
 
         public bool IsHdAudio
         {
@@ -52,6 +42,23 @@ namespace Gutha.ViewModels
             }
         }
 
+
+        public string SelectedVoice
+        {
+            get => _selectedVoice;
+            set
+            {
+                if (_selectedVoice != value)
+                {
+                    _selectedVoice = value;
+                    OnPropertyChanged();
+                    Debug.WriteLine($"Selected Voice: {_selectedVoice}");
+
+                    int selectedIndex = Voices.IndexOf(_selectedVoice);
+                    Debug.WriteLine($"Selected Index: {selectedIndex}");
+                }
+            }
+        }
         public ICommand SaveSettingsCommand { get; }
 
         public SettingsViewModel()

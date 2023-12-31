@@ -30,7 +30,10 @@ namespace Gutha.Services
                 response_format = "mp3"
             };
 
-            var content = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
+            var payloadString = JsonConvert.SerializeObject(payload);
+            System.Diagnostics.Debug.WriteLine($"Request payload: {payloadString}");
+
+            var content = new StringContent(payloadString, Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync(ApiBaseUrl, content);
             if (response.IsSuccessStatusCode)

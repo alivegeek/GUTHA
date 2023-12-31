@@ -1,4 +1,5 @@
 ﻿using Microsoft.Maui.Controls;
+using Microsoft.Maui.Devices;
 
 namespace Gutha
 {
@@ -7,6 +8,15 @@ namespace Gutha
         public AppShell()
         {
             InitializeComponent();
+
+            if (DeviceInfo.Idiom == DeviceIdiom.Desktop || DeviceInfo.Idiom == DeviceIdiom.Tablet)
+            {
+                FlyoutBehavior = FlyoutBehavior.Locked;
+            }
+            else
+            {
+                FlyoutBehavior = FlyoutBehavior.Flyout;
+            }
 
             // Additional setup can go here
         }

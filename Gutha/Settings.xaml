@@ -9,20 +9,20 @@
             <Label Text="API Key" FontAttributes="Bold"/>
             <Entry x:Name="apiKeyEntry" Placeholder="Enter API key" Text="{Binding ApiKey, Mode=TwoWay}"/>
 
-            <!-- Voice Picker -->
+            <!-- Voice Options -->
             <Label Text="Voice" FontAttributes="Bold"/>
-            <Picker x:Name="voicePicker" 
-                    SelectedItem="{Binding SelectedVoice, Mode=TwoWay}" 
-                    Title="Select a Voice">
-                <Picker.Items>
-                    <x:String>Alloy</x:String>
-                    <x:String>Echo</x:String>
-                    <x:String>Fable</x:String>
-                    <x:String>Onyx</x:String>
-                    <x:String>Nova</x:String>
-                    <x:String>Shimmer</x:String>
-                </Picker.Items>
-            </Picker>
+           <CollectionView x:Name="voiceCollectionView" 
+                ItemsSource="{Binding Voices}"
+                SelectionMode="Single"
+                SelectedItem="{Binding SelectedVoice}">
+    <CollectionView.ItemTemplate>
+        <DataTemplate>
+            <Frame Padding="10" Margin="5,10" CornerRadius="10" BorderColor="LightGray">
+                <Label Text="{Binding .}" FontSize="Medium" HorizontalOptions="Center" VerticalOptions="Center"/>
+            </Frame>
+        </DataTemplate>
+    </CollectionView.ItemTemplate>
+</CollectionView>
 
             <!-- Audio Quality Toggle -->
             <Label Text="HD Audio Quality" FontAttributes="Bold"/>
