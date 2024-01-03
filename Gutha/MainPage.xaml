@@ -8,23 +8,41 @@
 
             <!-- Existing controls... -->
 
-         <Frame Padding="0" Margin="0,30,0,0" CornerRadius="10" BackgroundColor="LightGray">
-    <Editor x:Name="textInput" 
-            Placeholder="Enter text here" 
-            HeightRequest="150" 
-            BackgroundColor="Transparent"
-            TextChanged="OnTextInputChanged"/>
-</Frame>
+            <Frame Padding="0" Margin="0,30,0,0" CornerRadius="20" BackgroundColor="LightGray">
+                <Editor x:Name="textInput" 
+                        Placeholder="Enter text here" 
+                        HeightRequest="500" 
+                        BackgroundColor="Transparent"
+                        TextChanged="OnTextInputChanged"/>
+            </Frame>
 
-            <!-- Submit and Play/Pause Buttons -->
+            <!-- Submit Button -->
             <Button x:Name="submitButton" Text="Submit" Clicked="OnSubmitClicked"/>
-            <Button x:Name="playPauseButton" Text="Play/Pause" Clicked="OnPlayPauseClicked"/>
+
+            <!-- Playback Controls -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Play/Pause Button -->
+                <Button x:Name="playPauseButton" Text="Play/Pause" Clicked="OnPlayPauseClicked" Grid.Column="0"/>
+
+                <!-- Speed Control Buttons (Right Aligned) -->
+                <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End" Spacing="10">
+                    <Button Text=".75x" />
+                    <Button Text="1.0x" />
+                    <Button Text="1.25x" />
+                    <Button Text="1.5x" />
+                    <Button Text="2x" />
+                </HorizontalStackLayout>
+            </Grid>
 
             <!-- Estimated Cost Label -->
-            <Label x:Name="estimatedCostLabel" Text="Estimated cost: $0.000"/>
-                <Label x:Name="statusLabel" TextColor="Red" />
+            <Label x:Name="estimatedCostLabel" Text="Estimated cost: "/>
+            <Label x:Name="statusLabel" TextColor="Red" />
 
         </VerticalStackLayout>
-
     </ScrollView>
 </ContentPage>

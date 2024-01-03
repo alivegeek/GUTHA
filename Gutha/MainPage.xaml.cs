@@ -105,5 +105,7 @@ namespace Gutha
         {
             statusLabel.Text = message;
         }
+
+        private void OnSpeedChanged() { }
     }
 }

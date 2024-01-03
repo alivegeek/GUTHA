@@ -63,7 +63,7 @@ namespace Gutha.ViewModels
 
         public SettingsViewModel()
         {
-            SaveSettingsCommand = new Command(SaveSettings);
+             SaveSettingsCommand = new Command(SaveSettings);
             LoadSettings();
         }
 
