@@ -4,44 +4,44 @@
              x:Class="Gutha.MainPage">
 
     <ScrollView>
-        <VerticalStackLayout Padding="30,0" Spacing="25">
+        <VerticalStackLayout Padding="20,0" Spacing="20">
 
-            <!-- Existing controls... -->
-
-            <Frame Padding="0" Margin="0,30,0,0" CornerRadius="20" BackgroundColor="LightGray">
+            <!-- Adjusted Frame for Editor with macOS styling -->
+            <Frame Padding="10" Margin="0,20,0,0" CornerRadius="8" BackgroundColor="#E0E0E0">
                 <Editor x:Name="textInput" 
                         Placeholder="Enter text here" 
-                        HeightRequest="500" 
+                        HeightRequest="600" 
                         BackgroundColor="Transparent"
                         TextChanged="OnTextInputChanged"/>
             </Frame>
 
-            <!-- Submit Button -->
-            <Button x:Name="submitButton" Text="Submit" Clicked="OnSubmitClicked"/>
+            <!-- Submit Button with macOS style -->
+            <Button x:Name="submitButton" Text="Submit" Clicked="OnSubmitClicked" BackgroundColor="#007AFF" TextColor="White"/>
 
-            <!-- Playback Controls -->
-            <Grid>
+            <!-- Playback Controls with more spacing -->
+            <Grid Margin="0,10,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- Play/Pause Button -->
-                <Button x:Name="playPauseButton" Text="Play/Pause" Clicked="OnPlayPauseClicked" Grid.Column="0"/>
+                <Button x:Name="playPauseButton" Text="Play/Pause" Clicked="OnPlayPauseClicked" Grid.Column="0" BackgroundColor="#007AFF" TextColor="White"/>
 
                 <!-- Speed Control Buttons (Right Aligned) -->
-                <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End" Spacing="10">
-                    <Button Text=".75x" />
-                    <Button Text="1.0x" />
-                    <Button Text="1.25x" />
-                    <Button Text="1.5x" />
-                    <Button Text="2x" />
-                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End" Spacing="15">
+    <Button Text=".75x" Clicked="OnSpeedButtonClicked" BackgroundColor="#007AFF" TextColor="White"/>
+    <Button Text="1.0x" Clicked="OnSpeedButtonClicked" BackgroundColor="#007AFF" TextColor="White"/>
+    <Button Text="1.25x" Clicked="OnSpeedButtonClicked" BackgroundColor="#007AFF" TextColor="White"/>
+    <Button Text="1.5x" Clicked="OnSpeedButtonClicked" BackgroundColor="#007AFF" TextColor="White"/>
+    <Button Text="2x" Clicked="OnSpeedButtonClicked" BackgroundColor="#007AFF" TextColor="White"/>
+</HorizontalStackLayout>
+
             </Grid>
 
             <!-- Estimated Cost Label -->
             <Label x:Name="estimatedCostLabel" Text="Estimated cost: "/>
-            <Label x:Name="statusLabel" TextColor="Red" />
+            <Label x:Name="statusLabel" TextColor="DarkRed" />
 
         </VerticalStackLayout>
     </ScrollView>

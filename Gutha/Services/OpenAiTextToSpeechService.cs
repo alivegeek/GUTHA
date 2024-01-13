@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using static Microsoft.Maui.ApplicationModel.Permissions;
 
 namespace Gutha.Services
 {
@@ -20,13 +21,14 @@ namespace Gutha.Services
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
         }
 
-        public async Task<byte[]> ConvertTextToSpeechAsync(string text, string voice, bool isHd)
+        public async Task<byte[]> ConvertTextToSpeechAsync(string text, string voice, bool isHd, double speed)
         {
             var payload = new
             {
                 model = isHd ? "tts-1-hd" : "tts-1",
                 input = text,
                 voice = voice,
+                speed = speed,
                 response_format = "mp3"
             };
 

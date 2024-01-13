@@ -12,20 +12,22 @@
             <!-- Voice Options -->
             <Label Text="Voice" FontAttributes="Bold"/>
             <ScrollView Orientation="Horizontal">
-                <HorizontalStackLayout x:Name="voiceOptionsStack" BindableLayout.ItemsSource="{Binding Voices}">
+                <HorizontalStackLayout BindableLayout.ItemsSource="{Binding Voices}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
                             <Frame Padding="10" Margin="5,10" CornerRadius="10" BorderColor="LightGray">
                                 <Label Text="{Binding .}" FontSize="Medium" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 <Frame.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnVoiceOptionTapped" NumberOfTapsRequired="1"/>
+                                    <TapGestureRecognizer 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.VoiceOptionCommand}" 
+                                        CommandParameter="{Binding .}" 
+                                        NumberOfTapsRequired="1"/>
                                 </Frame.GestureRecognizers>
                             </Frame>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </HorizontalStackLayout>
             </ScrollView>
-
             <!-- Audio Quality Toggle -->
             <Label Text="HD Audio Quality" FontAttributes="Bold"/>
             <Switch x:Name="qualityToggle" IsToggled="{Binding IsHdAudio, Mode=TwoWay}"/>

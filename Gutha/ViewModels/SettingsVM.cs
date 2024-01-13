@@ -4,6 +4,7 @@ using Microsoft.Maui.Controls; // Required for Command
 using Microsoft.Maui.Storage; // For Preferences
 using System.Diagnostics; // For Debug
 using System.Windows.Input;
+using System.Collections.Generic; // For List
 
 namespace Gutha.ViewModels
 {
@@ -12,7 +13,23 @@ namespace Gutha.ViewModels
         private string _apiKey;
         private string _selectedVoice;
         private bool _isHdAudio;
+
         public List<string> Voices { get; } = new List<string> { "alloy", "echo", "fable", "onyx", "nova", "shimmer" };
+
+        public ICommand VoiceOptionCommand { get; private set; }
+        public ICommand SaveSettingsCommand { get; private set; }
+
+        public SettingsViewModel()
+        {
+            VoiceOptionCommand = new Command<string>(OnVoiceOptionSelected);
+            SaveSettingsCommand = new Command(SaveSettings);
+            LoadSettings();
+        }
+
+        private void OnVoiceOptionSelected(string voice)
+        {
+            SelectedVoice = voice;
+        }
 
         public string ApiKey
         {
@@ -27,8 +44,6 @@ namespace Gutha.ViewModels
             }
         }
 
-      
-
         public bool IsHdAudio
         {
             get => _isHdAudio;
@@ -42,7 +57,6 @@ namespace Gutha.ViewModels
             }
         }
 
-
         public string SelectedVoice
         {
             get => _selectedVoice;
@@ -52,6 +66,7 @@ namespace Gutha.ViewModels
                 {
                     _selectedVoice = value;
                     OnPropertyChanged();
+                    UpdateVoiceOptions();
                     Debug.WriteLine($"Selected Voice: {_selectedVoice}");
 
                     int selectedIndex = Voices.IndexOf(_selectedVoice);
@@ -59,12 +74,18 @@ namespace Gutha.ViewModels
                 }
             }
         }
-        public ICommand SaveSettingsCommand { get; }
 
-        public SettingsViewModel()
+        private void UpdateVoiceOptions()
         {
-             SaveSettingsCommand = new Command(SaveSettings);
-            LoadSettings();
+            foreach (var voice in Voices)
+            {
+                OnPropertyChanged($"Is{voice}Selected");
+            }
+        }
+
+        public bool IsVoiceSelected(string voice)
+        {
+            return voice == _selectedVoice;
         }
 
         private void SaveSettings()

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Plugin.Maui.Audio; // Ensure this is correctly installed and referenced
 using System.IO; // For MemoryStream
+using AVKit;
 
 namespace Gutha
 {
@@ -12,6 +13,7 @@ namespace Gutha
     {
         private IAudioPlayer _audioPlayer;
         private IAudioManager _audioManager;
+        private double playbackSpeed = 1.0; // Default speed
 
         public MainPage()
         {
@@ -39,9 +41,10 @@ namespace Gutha
 
                 // Retrieve the selected voice from preferences
                 var selectedVoice = Preferences.Get("SelectedVoice", "alloy"); // Default to "alloy" if not set
+                                                                               // Assume playbackSpeed is already set by another part of your UI, like a speed selection button
 
                 var ttsService = new OpenAiTextToSpeechService(directApiKey);
-                var audioBytes = await ttsService.ConvertTextToSpeechAsync(textInput.Text, selectedVoice, AppSettings.IsHdAudio);
+                var audioBytes = await ttsService.ConvertTextToSpeechAsync(textInput.Text, selectedVoice, AppSettings.IsHdAudio, playbackSpeed);
 
                 // Play the new audio
                 await PlayAudio(audioBytes);
@@ -54,6 +57,17 @@ namespace Gutha
             }
         }
 
+        private void OnSpeedButtonClicked(object sender, EventArgs e)
+        {
+            if (sender is Button speedButton)
+            {
+                var speedText = speedButton.Text.Replace("x", ""); // Remove the 'x' from the text
+                if (double.TryParse(speedText, out double speed))
+                {
+                    playbackSpeed = speed;
+                }
+            }
+        }
 
         private async Task PlayAudio(byte[] audioBytes)
         {
@@ -106,6 +120,12 @@ namespace Gutha
             statusLabel.Text = message;
         }
 
-        private void OnSpeedChanged() { }
+        private void OnSpeedChanged(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                playbackSpeed = Convert.ToDouble(button.Text.Replace("x", ""));
+            }
+        }
     }
 }
