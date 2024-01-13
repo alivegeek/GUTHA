@@ -16,7 +16,7 @@ namespace Gutha
         private IAudioPlayer _audioPlayer;
         private IAudioManager _audioManager;
         private FakeYouTextToSpeechService _ttsService;
-        private const string FakeYouModelToken = "TM:fmspb239ea3a"; // Replace with your model token
+        private const string FakeYouModelToken = "TM:fmspb239ea3a"; // Thats Yoda <<
         private double playbackSpeed = 1.0;
 
         public FakeYou()
