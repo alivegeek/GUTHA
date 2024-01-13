@@ -3,8 +3,8 @@ using Microsoft.Maui.Storage;
 using Gutha.Services;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Plugin.Maui.Audio; // Ensure this is correctly installed and referenced
-using System.IO; // For MemoryStream
+using Plugin.Maui.Audio; 
+using System.IO; 
 using AVKit;
 
 namespace Gutha
@@ -13,7 +13,7 @@ namespace Gutha
     {
         private IAudioPlayer _audioPlayer;
         private IAudioManager _audioManager;
-        private double playbackSpeed = 1.0; // Default speed
+        private double playbackSpeed = 1.0; 
 
         public MainPage()
         {

@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Gutha.FakeYou">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20,0" Spacing="20">
+
+            <!-- Adjusted Frame for Editor with macOS styling -->
+            <Frame Padding="10" Margin="0,20,0,0" CornerRadius="8" BackgroundColor="Pink">
+                <Editor x:Name="textInput" 
+                        Placeholder="Enter text here" 
+                        HeightRequest="600" 
+                        BackgroundColor="Transparent"
+                        TextChanged="OnTextInputChanged"/>
+            </Frame>
+
+            <!-- Submit Button with macOS style -->
+            <Button x:Name="submitButton" Text="Submit" Clicked="OnSubmitClicked" BackgroundColor="#007AFF" TextColor="White"/>
+
+            <!-- Playback Controls with more spacing -->
+            <Grid Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Play/Pause Button -->
+                <Button x:Name="playPauseButton" Text="Play/Pause" Clicked="OnPlayPauseClicked" Grid.Column="0" BackgroundColor="#007AFF" TextColor="White"/>
+
+                <!-- Speed Control Buttons (Right Aligned) -->
+                <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End" Spacing="15">
+    <Button Text=".75x" Clicked="OnSpeedButtonClicked" BackgroundColor="#007AFF" TextColor="White"/>
+    <Button Text="1.0x" Clicked="OnSpeedButtonClicked" BackgroundColor="#007AFF" TextColor="White"/>
+    <Button Text="1.25x" Clicked="OnSpeedButtonClicked" BackgroundColor="#007AFF" TextColor="White"/>
+    <Button Text="1.5x" Clicked="OnSpeedButtonClicked" BackgroundColor="#007AFF" TextColor="White"/>
+    <Button Text="2x" Clicked="OnSpeedButtonClicked" BackgroundColor="#007AFF" TextColor="White"/>
+</HorizontalStackLayout>
+
+            </Grid>
+
+            <!-- Estimated Cost Label -->
+            <Label x:Name="estimatedCostLabel" Text="Estimated cost: "/>
+            <Label x:Name="statusLabel" TextColor="DarkRed" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

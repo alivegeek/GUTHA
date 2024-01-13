@@ -27,10 +27,15 @@
     </Shell.ItemTemplate>
 
     <!-- Main navigation item for Home -->
-    <FlyoutItem Title="Home" Icon="icon_home.png">
+    <FlyoutItem Title="OpenAI TTS" Icon="icon_home.png">
         <ShellContent Route="MainPage" ContentTemplate="{DataTemplate local:MainPage}" />
     </FlyoutItem>
-    
+
+     <!-- Main navigation item for FakeYou -->
+    <FlyoutItem Title="FakeYou" Icon="icon_home.png">
+        <ShellContent Route="FakeYou" ContentTemplate="{DataTemplate local:FakeYou}" />
+    </FlyoutItem>
+
     <!-- Settings navigation item -->
     <FlyoutItem Title="Settings" Icon="icon_settings.png">
         <ShellContent ContentTemplate="{DataTemplate local:Settings}" />
