@@ -21,6 +21,14 @@ namespace Gutha
             _audioManager = AudioManager.Current;
         }
 
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+        }
+
+       
+
         private void OnTextInputChanged(object sender, TextChangedEventArgs e)
         {
             UpdateEstimatedCost();
@@ -127,5 +135,7 @@ namespace Gutha
                 playbackSpeed = Convert.ToDouble(button.Text.Replace("x", ""));
             }
         }
+
+
     }
 }

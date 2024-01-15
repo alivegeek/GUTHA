@@ -8,7 +8,6 @@ using System.IO;
 using System.Net.Http;
 using System;
 using AVKit;
-
 namespace Gutha
 {
     public partial class FakeYou : ContentPage
@@ -16,50 +15,80 @@ namespace Gutha
         private IAudioPlayer _audioPlayer;
         private IAudioManager _audioManager;
         private FakeYouTextToSpeechService _ttsService;
-        private const string FakeYouModelToken = "TM:fmspb239ea3a"; // Thats Yoda <<
         private double playbackSpeed = 1.0;
+        private string _selectedModelToken; // Variable to store the selected model token
+        public Dictionary<string, string> ModelTokensDictionary { get; set; } // Dictionary to hold model tokens
+        private const string FakeYouModelToken = "TM:fmspb239ea3a"; // Default model token.. Its Yoda
 
         public FakeYou()
         {
             InitializeComponent();
             _audioManager = AudioManager.Current;
             _ttsService = new FakeYouTextToSpeechService(); // Initialize without API Key as per your requirement
+            PopulateModelTokensDictionary();
+            this.BindingContext = this;
+        }
+
+        private void PopulateModelTokensDictionary()
+        {
+            ModelTokensDictionary = new Dictionary<string, string>
+            {
+                { "Yoda", "TM:fmspb239ea3a" },
+                { "Donald Trump", "TM:djceg00wmcv5" },
+                { "Donald Trump Angry", "TM:4v0ft4j72y2g" },
+                { "Donkey (Shrek)", "TM:t2dnvad2n4g8" },
+                 { "Joe Biden","TM:6ctz239896cf"},
+                { "C3P0 (Star Wars)", "TM:kz7xck6af35w" },
+                { "Boba Fett", "TM:jpvktpbeq9p5" },
+                { "James Earl Jones", "TM:785dsnba43hk" },
+                { "Liam Neeson","TM:k158fr4f180j" },
+                { "Clone Trooper","TM:n6bn57e75rh8" },
+                {"Peggy Hill", "TM:zfy5xhbrgfw2"},
+                 {"Peter Griffin", "TM:ympn9keyq2n9"},
+                  {"Professor Farnsworth", "TM:64wbhzc3sr8x"},
+                   {"Mrs. Piggy", "TM:kmjexxq5hst8"},
+                    {"Kermit the Frog", "TM:ft86an38yf30"},
+                {"Adam Sandler","TM:9jvnrmrer0ep" },
+                {"Woody (Toy Story)","TM:808sy8zt6pts" },
+                {"Buzz Lightyear","TM:y8k6b1ekk1t2" },
+                {"Home Simpson","TM:2n4dwafb1t1r" },
+                {"Mr Mackey (South Park)","TM:x8n248j4x42h" },
+                { "My Garrison (South Park)","TM:y972m90w4g4a"},
+                { "Zoidberg","TM:sa4znpqg717s"},
+                { "Harry Potter","TM:nrwkc2acr6wa"},
+                { "Mickey Mouse","TM:ar1cc7b9k3s8"}
+               
+
+
+                // Add more model tokens as required
+            };
         }
 
         private async void OnSubmitClicked(object sender, EventArgs e)
         {
             try
             {
-                // Stop and dispose of the existing audio player if it exists
                 if (_audioPlayer != null)
                 {
                     _audioPlayer.Stop();
                     _audioPlayer.Dispose();
                 }
 
-                // Update status to reflect that TTS request is being created
                 UpdateStatus("Creating TTS request...");
+                var response = await _ttsService.CreateTtsRequestAsync(_selectedModelToken ?? FakeYouModelToken, textInput.Text); // Use the selected token or default
+                var jobToken = ExtractJobToken(response);
 
-                // Create TTS request
-                var response = await _ttsService.CreateTtsRequestAsync(FakeYouModelToken, textInput.Text);
-                var jobToken = ExtractJobToken(response); // Implement this method to extract job token from response
-
-                // Update status to reflect that TTS request is processing
                 UpdateStatus("Processing TTS request...");
-
-                // Poll for TTS request status
                 string pollResponse;
                 do
                 {
-                    await Task.Delay(1000); // Wait for 1 second before polling again
+                    await Task.Delay(1000);
                     pollResponse = await _ttsService.PollTtsRequestStatusAsync(jobToken);
                 }
-                while (!IsJobComplete(pollResponse)); // Implement this method to check if job is complete
+                while (!IsJobComplete(pollResponse));
 
-                // Update status to reflect that audio is being fetched
                 UpdateStatus("Fetching audio...");
-
-                var audioUrl = ExtractAudioUrl(pollResponse); // Implement this method to extract audio URL
+                var audioUrl = ExtractAudioUrl(pollResponse);
                 await PlayAudioFromUrl(audioUrl);
 
                 UpdateStatus("Audio generated successfully.");
@@ -125,7 +154,6 @@ namespace Gutha
             bool isHdAudio = Preferences.Get("IsHdAudio", false);
             double costPerThousandCharacters = isHdAudio ? 0.030 : 0.015;
             double estimatedCost = (characterCount / 1000.0) * costPerThousandCharacters;
-            estimatedCostLabel.Text = $"Estimated cost: ${estimatedCost:F3}";
         }
 
         private void UpdateStatus(string message)
@@ -155,5 +183,33 @@ namespace Gutha
             return path != null ? $"https://storage.googleapis.com/vocodes-public{path}" : null;
         }
 
+        private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.CurrentSelection.Count > 0)
+            {
+                var selectedItem = e.CurrentSelection[0]; // Get the selected item
+                if (selectedItem is KeyValuePair<string, string> selectedPair)
+                {
+                    // Handle the selection
+                    // For example, you can display the selected value or use it in some way
+                    Console.WriteLine($"Selected: {selectedPair.Value}");
+                }
+            }
+        }
+        
+
+        private void OnVoiceSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.CurrentSelection.Count > 0)
+            {
+                var selectedItem = e.CurrentSelection[0];
+                if (selectedItem is KeyValuePair<string, string> selectedPair)
+                {
+                    _selectedModelToken = selectedPair.Value;
+                    Console.WriteLine($"Selected Model Token: {_selectedModelToken}");
+                }
+            }
+        }
     }
+
 }

@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="Gutha.FakeYou">
 
     <ScrollView>
@@ -28,21 +29,33 @@
                 <!-- Play/Pause Button -->
                 <Button x:Name="playPauseButton" Text="Play/Pause" Clicked="OnPlayPauseClicked" Grid.Column="0" BackgroundColor="#007AFF" TextColor="White"/>
 
-                <!-- Speed Control Buttons (Right Aligned) -->
-                <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End" Spacing="15">
-    <Button Text=".75x" Clicked="OnSpeedButtonClicked" BackgroundColor="#007AFF" TextColor="White"/>
-    <Button Text="1.0x" Clicked="OnSpeedButtonClicked" BackgroundColor="#007AFF" TextColor="White"/>
-    <Button Text="1.25x" Clicked="OnSpeedButtonClicked" BackgroundColor="#007AFF" TextColor="White"/>
-    <Button Text="1.5x" Clicked="OnSpeedButtonClicked" BackgroundColor="#007AFF" TextColor="White"/>
-    <Button Text="2x" Clicked="OnSpeedButtonClicked" BackgroundColor="#007AFF" TextColor="White"/>
-</HorizontalStackLayout>
-
+       
             </Grid>
 
-            <!-- Estimated Cost Label -->
-            <Label x:Name="estimatedCostLabel" Text="Estimated cost: "/>
+        <toolkit:Expander IsExpanded="True">
+    <toolkit:Expander.Header>
+        <Label Text="Select a Voice" />
+    </toolkit:Expander.Header>
+   <CollectionView x:Name="voicesCollectionView"
+                SelectionMode="Single"
+                ItemsSource="{Binding ModelTokensDictionary}"
+                SelectionChanged="OnVoiceSelectionChanged">
+    <CollectionView.ItemTemplate>
+    <DataTemplate>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="{Binding Key}" FontAttributes="Bold"/>
+        </StackLayout>
+    </DataTemplate>
+</CollectionView.ItemTemplate>
+
+    </CollectionView>
+</toolkit:Expander>
+          
+
             <Label x:Name="statusLabel" TextColor="DarkRed" />
 
         </VerticalStackLayout>
+        
+
     </ScrollView>
 </ContentPage>

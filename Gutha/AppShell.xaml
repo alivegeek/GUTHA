@@ -4,7 +4,8 @@
        x:Class="Gutha.AppShell"
        Shell.FlyoutBehavior="Flyout"
        FlyoutBackgroundColor="Snow"
-       Title="Gutha Text To Speech">
+       Title="Gutha Text To Speech"
+       >
 
     <!-- Custom Flyout Header -->
     <Shell.FlyoutHeaderTemplate>

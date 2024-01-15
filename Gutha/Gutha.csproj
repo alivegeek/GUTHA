@@ -15,7 +15,7 @@
 		<ApplicationTitle>Gutha</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.Holbrook.gutha</ApplicationId>
+		<ApplicationId>com.holbrook.gutha</ApplicationId>
 		<ApplicationIdGuid>3b04921e-e397-4dcf-970c-a7ad4098a003</ApplicationIdGuid>
 
 		<!-- Versions -->
@@ -46,7 +46,6 @@
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -60,7 +59,7 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Xam.Plugin.SimpleAudioPlayer" Version="1.6.0" />
 		<PackageReference Include="Plugin.Maui.Audio" Version="2.1.0" />
-		<PackageReference Include="FakeYouNet" Version="1.0.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="6.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
