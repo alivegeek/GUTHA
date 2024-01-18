@@ -64,34 +64,53 @@ namespace Gutha
             };
         }
 
+        private List<string> _audioUrls = new List<string>();
+
         private async void OnSubmitClicked(object sender, EventArgs e)
         {
             try
             {
-                if (_audioPlayer != null)
+                _audioUrls.Clear();
+                List<string> textSegments = SplitText(textInput.Text);
+
+                foreach (var segment in textSegments)
                 {
-                    _audioPlayer.Stop();
-                    _audioPlayer.Dispose();
+                    UpdateStatus("Creating TTS request for segment...");
+                    var response = await _ttsService.CreateTtsRequestAsync(_selectedModelToken ?? FakeYouModelToken, segment);
+                    var jobToken = ExtractJobToken(response);
+
+                    Debug.WriteLine("TTS request created for segment.");
+
+                    UpdateStatus("Processing TTS request for segment...");
+                    string pollResponse;
+                    do
+                    {
+                        await Task.Delay(1000);
+                        pollResponse = await _ttsService.PollTtsRequestStatusAsync(jobToken);
+                    }
+                    while (!IsJobComplete(pollResponse));
+
+                    Debug.WriteLine("TTS request processing complete for segment.");
+
+                    UpdateStatus("Fetching audio URL for segment...");
+                    var audioUrl = ExtractAudioUrl(pollResponse);
+                    if (!string.IsNullOrEmpty(audioUrl))
+                    {
+                        _audioUrls.Add(audioUrl);
+                        Debug.WriteLine("Audio URL added for segment.");
+                    }
                 }
 
-                UpdateStatus("Creating TTS request...");
-                var response = await _ttsService.CreateTtsRequestAsync(_selectedModelToken ?? FakeYouModelToken, textInput.Text); // Use the selected token or default
-                var jobToken = ExtractJobToken(response);
-
-                UpdateStatus("Processing TTS request...");
-                string pollResponse;
-                do
+                if (_audioUrls.Any())
                 {
-                    await Task.Delay(1000);
-                    pollResponse = await _ttsService.PollTtsRequestStatusAsync(jobToken);
+                    UpdateStatus("Playing audio segments...");
+                    await PlayAudioSequence();
+                    UpdateStatus("All audio segments played successfully.");
                 }
-                while (!IsJobComplete(pollResponse));
-
-                UpdateStatus("Fetching audio...");
-                var audioUrl = ExtractAudioUrl(pollResponse);
-                await PlayAudioFromUrl(audioUrl);
-
-                UpdateStatus("Audio generated successfully.");
+                else
+                {
+                    UpdateStatus("No audio segments generated.");
+                }
             }
             catch (Exception ex)
             {
@@ -100,18 +119,45 @@ namespace Gutha
             }
         }
 
+
         private async Task PlayAudioFromUrl(string audioUrl)
         {
+            var tcs = new TaskCompletionSource<bool>();
+            EventHandler playbackEndedHandler = null;
+
+            playbackEndedHandler = (sender, e) =>
+            {
+                _audioPlayer.PlaybackEnded -= playbackEndedHandler;
+                tcs.SetResult(true);
+            };
+
             using (var client = new HttpClient())
             {
                 var audioStream = await client.GetStreamAsync(audioUrl);
                 _audioPlayer = _audioManager.CreatePlayer(audioStream);
+
                 if (_audioPlayer != null)
                 {
+                    _audioPlayer.PlaybackEnded += playbackEndedHandler;
                     _audioPlayer.Play();
+
+                    // Wait for the playback to complete
+                    await tcs.Task;
                 }
             }
         }
+
+
+        private async Task PlayAudioSequence()
+        {
+            foreach (var audioUrl in _audioUrls)
+            {
+                await PlayAudioFromUrl(audioUrl);
+            }
+
+            Debug.WriteLine("Finished playing all audio segments.");
+        }
+
 
         private void OnTextInputChanged(object sender, TextChangedEventArgs e)
         {
@@ -147,6 +193,7 @@ namespace Gutha
                 _audioPlayer.Play();
             }
         }
+
 
         private void UpdateEstimatedCost()
         {
@@ -196,7 +243,46 @@ namespace Gutha
                 }
             }
         }
-        
+        private List<string> SplitText(string inputText, int maxSegmentSize = 200)
+        {
+            List<string> segments = new List<string>();
+            int startIndex = 0;
+
+            Debug.WriteLine("Starting to split text.");
+
+            while (startIndex < inputText.Length)
+            {
+                int segmentSize = maxSegmentSize;
+                if (startIndex + segmentSize > inputText.Length)
+                {
+                    segmentSize = inputText.Length - startIndex; // Adjust to remaining length
+                }
+                else if (!char.IsWhiteSpace(inputText[startIndex + segmentSize - 1]))
+                {
+                    while (segmentSize > 0 && !char.IsWhiteSpace(inputText[startIndex + segmentSize - 1]))
+                    {
+                        segmentSize--;
+                    }
+                    if (segmentSize == 0)
+                    {
+                        segmentSize = maxSegmentSize; // Fallback to avoid zero length
+                    }
+                }
+
+                string segment = inputText.Substring(startIndex, segmentSize);
+                segments.Add(segment);
+
+                Debug.WriteLine($"Segment added: {segment}");
+
+                startIndex += segmentSize;
+            }
+
+            Debug.WriteLine("Finished splitting text.");
+
+            return segments;
+        }
+
+
 
         private void OnVoiceSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
