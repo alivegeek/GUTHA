@@ -8,26 +8,38 @@ using System.IO;
 using System.Net.Http;
 using System;
 using AVKit;
+
 namespace Gutha
 {
     public partial class FakeYou : ContentPage
     {
+        #region Fields
+
         private IAudioPlayer _audioPlayer;
         private IAudioManager _audioManager;
         private FakeYouTextToSpeechService _ttsService;
         private double playbackSpeed = 1.0;
-        private string _selectedModelToken; // Variable to store the selected model token
-        public Dictionary<string, string> ModelTokensDictionary { get; set; } // Dictionary to hold model tokens
-        private const string FakeYouModelToken = "TM:fmspb239ea3a"; // Default model token.. Its Yoda
+        private string _selectedModelToken;
+        public Dictionary<string, string> ModelTokensDictionary { get; set; }
+        private const string FakeYouModelToken = "TM:fmspb239ea3a";
+        private List<string> _audioUrls = new List<string>();
+
+        #endregion
+
+        #region Constructor
 
         public FakeYou()
         {
             InitializeComponent();
             _audioManager = AudioManager.Current;
-            _ttsService = new FakeYouTextToSpeechService(); // Initialize without API Key as per your requirement
+            _ttsService = new FakeYouTextToSpeechService();
             PopulateModelTokensDictionary();
             this.BindingContext = this;
         }
+
+        #endregion
+
+        #region Private Methods
 
         private void PopulateModelTokensDictionary()
         {
@@ -37,17 +49,17 @@ namespace Gutha
                 { "Donald Trump", "TM:djceg00wmcv5" },
                 { "Donald Trump Angry", "TM:4v0ft4j72y2g" },
                 { "Donkey (Shrek)", "TM:t2dnvad2n4g8" },
-                 { "Joe Biden","TM:6ctz239896cf"},
+                { "Joe Biden","TM:6ctz239896cf"},
                 { "C3P0 (Star Wars)", "TM:kz7xck6af35w" },
                 { "Boba Fett", "TM:jpvktpbeq9p5" },
                 { "James Earl Jones", "TM:785dsnba43hk" },
                 { "Liam Neeson","TM:k158fr4f180j" },
                 { "Clone Trooper","TM:n6bn57e75rh8" },
                 {"Peggy Hill", "TM:zfy5xhbrgfw2"},
-                 {"Peter Griffin", "TM:ympn9keyq2n9"},
-                  {"Professor Farnsworth", "TM:64wbhzc3sr8x"},
-                   {"Mrs. Piggy", "TM:kmjexxq5hst8"},
-                    {"Kermit the Frog", "TM:ft86an38yf30"},
+                {"Peter Griffin", "TM:ympn9keyq2n9"},
+                {"Professor Farnsworth", "TM:64wbhzc3sr8x"},
+                {"Mrs. Piggy", "TM:kmjexxq5hst8"},
+                {"Kermit the Frog", "TM:ft86an38yf30"},
                 {"Adam Sandler","TM:9jvnrmrer0ep" },
                 {"Woody (Toy Story)","TM:808sy8zt6pts" },
                 {"Buzz Lightyear","TM:y8k6b1ekk1t2" },
@@ -57,14 +69,8 @@ namespace Gutha
                 { "Zoidberg","TM:sa4znpqg717s"},
                 { "Harry Potter","TM:nrwkc2acr6wa"},
                 { "Mickey Mouse","TM:ar1cc7b9k3s8"}
-               
-
-
-                // Add more model tokens as required
             };
         }
-
-        private List<string> _audioUrls = new List<string>();
 
         private async void OnSubmitClicked(object sender, EventArgs e)
         {
@@ -119,7 +125,6 @@ namespace Gutha
             }
         }
 
-
         private async Task PlayAudioFromUrl(string audioUrl)
         {
             var tcs = new TaskCompletionSource<bool>();
@@ -147,7 +152,6 @@ namespace Gutha
             }
         }
 
-
         private async Task PlayAudioSequence()
         {
             foreach (var audioUrl in _audioUrls)
@@ -157,7 +161,6 @@ namespace Gutha
 
             Debug.WriteLine("Finished playing all audio segments.");
         }
-
 
         private void OnTextInputChanged(object sender, TextChangedEventArgs e)
         {
@@ -194,7 +197,6 @@ namespace Gutha
             }
         }
 
-
         private void UpdateEstimatedCost()
         {
             int characterCount = textInput.Text?.Length ?? 0;
@@ -214,14 +216,12 @@ namespace Gutha
             return jsonResponse["inference_job_token"]?.ToString();
         }
 
-
         private bool IsJobComplete(string pollResponse)
         {
             var jsonResponse = Newtonsoft.Json.Linq.JObject.Parse(pollResponse);
             string status = jsonResponse["state"]?["status"]?.ToString();
             return status == "complete_success";
         }
-
 
         private string ExtractAudioUrl(string pollResponse)
         {
@@ -243,6 +243,7 @@ namespace Gutha
                 }
             }
         }
+
         private List<string> SplitText(string inputText, int maxSegmentSize = 200)
         {
             List<string> segments = new List<string>();
@@ -282,8 +283,6 @@ namespace Gutha
             return segments;
         }
 
-
-
         private void OnVoiceSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.CurrentSelection.Count > 0)
@@ -296,6 +295,7 @@ namespace Gutha
                 }
             }
         }
-    }
 
+        #endregion
+    }
 }
